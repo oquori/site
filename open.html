@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>oquori | Telegram-боты от 1000₽, сайты до 1500₽</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f5f7fc;
+            color: #0a0f1e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        @keyframes fadeSlideUp {
+            0% {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeSlideRight {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes softGlow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(59,130,246,0.2);
+            }
+            50% {
+                box-shadow: 0 0 0 12px rgba(59,130,246,0.05);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(59,130,246,0);
+            }
+        }
+
+        @keyframes floatSmooth {
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(1deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
+        }
+
+        .animate-fade-up {
+            animation: fadeSlideUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+            opacity: 0;
+        }
+
+        .animate-fade-right {
+            animation: fadeSlideRight 0.7s ease-out forwards;
+            opacity: 0;
+        }
+
+        .animate-float {
+            animation: floatSmooth 5s ease-in-out infinite;
+        }
+
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+        .delay-3 { animation-delay: 0.35s; }
+        .delay-4 { animation-delay: 0.5s; }
+
+        .hover-lift {
+            transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+        }
+        .hover-lift:hover {
+            transform: translateY(-10px) scale(1.01);
+            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.2);
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 28px 0;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: #0a0f1e;
+            transition: 0.2s;
+        }
+        .logo:hover {
+            transform: scale(1.02);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 36px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            font-weight: 500;
+            color: #1e293b;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 0%;
+            height: 2px;
+            background: #3B82F6;
+            transition: width 0.3s ease;
+        }
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        .nav-links a:hover {
+            color: #3B82F6;
+        }
+
+        .btn-outline {
+            border: 1.5px solid #3B82F6;
+            background: transparent;
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: #3B82F6;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            background: #3B82F6;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(59,130,246,0.3);
+        }
+
+        .btn-primary {
+            background: #1E2A5E;
+            border: none;
+            padding: 12px 32px;
+            border-radius: 60px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+        .btn-primary:hover {
+            background: #2c3e8f;
+            transform: translateY(-3px);
+            box-shadow: 0 12px 25px rgba(30,42,94,0.25);
+        }
+
+        .btn-large {
+            padding: 14px 40px;
+            font-size: 1rem;
+        }
+
+        .hero {
+            padding: 50px 0 70px 0;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 50px;
+        }
+
+        .hero-content {
+            flex: 1.2;
+        }
+
+        .hero-badge {
+            background: rgba(59,130,246,0.1);
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: #1E2A5E;
+            margin-bottom: 28px;
+            backdrop-filter: blur(4px);
+        }
+
+        .hero-content h1 {
+            font-size: 3.2rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 24px;
+            color: #0a0f1e;
+        }
+
+        .hero-highlight {
+            color: #3B82F6;
+            position: relative;
+            display: inline-block;
+        }
+        .hero-highlight::before {
+            content: '';
+            position: absolute;
+            bottom: 6px;
+            left: 0;
+            width: 100%;
+            height: 8px;
+            background: rgba(59,130,246,0.2);
+            z-index: -1;
+            border-radius: 4px;
+        }
+
+        .hero-desc {
+            font-size: 1.1rem;
+            color: #334155;
+            max-width: 550px;
+            margin-bottom: 32px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 40px;
+            margin-top: 28px;
+        }
+        .stat h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #1E2A5E;
+        }
+
+        .hero-image {
+            flex: 0.9;
+            background: linear-gradient(135deg, #ffffff, #f0f4fe);
+            border-radius: 56px;
+            padding: 25px;
+            text-align: center;
+            box-shadow: 0 30px 40px -20px rgba(0,0,0,0.12);
+            transition: all 0.3s;
+        }
+        .hero-image:hover {
+            transform: scale(1.01);
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 800;
+            margin-bottom: 16px;
+        }
+        .section-sub {
+            text-align: center;
+            color: #475569;
+            max-width: 600px;
+            margin: 0 auto 56px auto;
+        }
+
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 36px;
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 36px;
+            padding: 36px 28px;
+            transition: all 0.4s;
+            border: 1px solid rgba(59,130,246,0.15);
+        }
+        .service-card:hover {
+            border-color: #3B82F6;
+            animation: softGlow 1.2s infinite;
+        }
+
+        .card-icon {
+            background: #eef2ff;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 24px;
+            margin-bottom: 28px;
+            font-size: 2rem;
+            transition: 0.3s;
+        }
+        .service-card:hover .card-icon {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .service-card h3 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+        .price-tag {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: #1E2A5E;
+            margin-top: 20px;
+        }
+        .price-small {
+            font-size: 0.9rem;
+            font-weight: normal;
+            color: #5b6e8c;
+        }
+        .soon-badge {
+            display: inline-block;
+            background: #eef2ff;
+            padding: 6px 14px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: #3B82F6;
+            margin-top: 16px;
+        }
+
+        .process-steps {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 28px;
+            margin-top: 32px;
+        }
+        .step {
+            flex: 1;
+            min-width: 230px;
+            background: white;
+            border-radius: 36px;
+            padding: 36px 24px;
+            text-align: center;
+            transition: all 0.35s;
+            border: 1px solid #eef2ff;
+        }
+        .step:hover {
+            transform: translateY(-8px);
+            border-color: #3B82F6;
+            box-shadow: 0 25px 35px -16px rgba(59,130,246,0.2);
+        }
+        .step-number {
+            background: #1E2A5E;
+            color: white;
+            width: 56px;
+            height: 56px;
+            font-size: 1.6rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 60px;
+            margin: 0 auto 24px auto;
+            transition: 0.2s;
+        }
+        .step:hover .step-number {
+            transform: scale(1.05);
+            background: #3B82F6;
+        }
+
+        .projects-placeholder {
+            background: white;
+            border-radius: 36px;
+            padding: 48px 32px;
+            text-align: center;
+            border: 1px solid #eef2ff;
+            transition: all 0.3s;
+        }
+        .projects-placeholder:hover {
+            border-color: #3B82F6;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 30px -12px rgba(59,130,246,0.1);
+        }
+        .projects-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .dark-footer {
+            background: #111827;
+            color: #e5e7eb;
+            padding: 60px 0 40px;
+            margin-top: 40px;
+            border-top: 1px solid #1f2937;
+        }
+        .footer-info {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            gap: 48px;
+            margin-bottom: 48px;
+        }
+        .footer-col {
+            flex: 1;
+            min-width: 200px;
+        }
+        .footer-col h4 {
+            color: white;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+        .footer-col p, .footer-col a {
+            color: #9ca3af;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 12px;
+            transition: color 0.2s;
+        }
+        .footer-col a:hover {
+            color: #3B82F6;
+        }
+        .soon-light {
+            background: rgba(59,130,246,0.2);
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 30px;
+            font-size: 0.7rem;
+            color: #60a5fa;
+            margin-left: 8px;
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 32px;
+            border-top: 1px solid #1f2937;
+            font-size: 0.8rem;
+            color: #6b7280;
+        }
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            background: #1f2937;
+            color: white;
+            padding: 12px 28px;
+            border-radius: 60px;
+            font-weight: 500;
+            opacity: 0;
+            transition: 0.25s;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) scale(1);
+        }
+
+        @media (max-width: 800px) {
+            .hero-content h1 { font-size: 2.2rem; }
+            .navbar { flex-direction: column; }
+            .nav-links { flex-wrap: wrap; justify-content: center; }
+            .section { padding: 60px 0; }
+            .footer-info { flex-direction: column; gap: 32px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="toast" id="toastMsg">✨ Свяжемся с вами в удобном мессенджере</div>
+
+<header>
+    <div class="container">
+        <div class="navbar">
+            <div class="logo animate-fade-right">oquori</div>
+            <ul class="nav-links">
+                <li><a href="#services">услуги</a></li>
+                <li><a href="#process">как работаем</a></li>
+                <li><a href="#projects">проекты</a></li>
+            </ul>
+            <button class="btn-outline" id="navCtaBtn">связаться</button>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <div class="hero">
+            <div class="hero-content">
+                <div class="hero-badge animate-fade-up">нейросети → низкие цены</div>
+                <h1 class="animate-fade-up delay-1">Telegram-боты <span class="hero-highlight">от 1000₽</span><br>сайты до 1500₽</h1>
+                <p class="hero-desc animate-fade-up delay-2">Создаём ботов и сайты с помощью ИИ. Дёшево, быстро, результат на почту + в любой мессенджер.</p>
+                <button class="btn-primary btn-large animate-fade-up delay-3" id="heroCtaBtn">написать в Telegram</button>
+                <div class="hero-stats animate-fade-up delay-4">
+                    <div class="stat"><h3>1000₽</h3><span>боты</span></div>
+                    <div class="stat"><h3>1500₽</h3><span>сайты</span></div>
+                    <div class="stat"><h3>13–23</h3><span>время работы</span></div>
+                </div>
+            </div>
+            <div class="hero-image animate-float">
+                <svg width="260" height="220" viewBox="0 0 260 220" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="35" y="70" width="190" height="100" rx="24" fill="#EFF6FF" stroke="#3B82F6" stroke-width="2"/>
+                    <circle cx="88" cy="120" r="10" fill="#1E2A5E"/>
+                    <circle cx="172" cy="120" r="10" fill="#1E2A5E"/>
+                    <path d="M118 138 L130 158 L142 138" stroke="#3B82F6" stroke-width="3" fill="none"/>
+                    <rect x="180" y="30" width="38" height="28" rx="8" fill="#D9E6FF" stroke="#3B82F6" stroke-width="1.5"/>
+                    <rect x="42" y="30" width="38" height="28" rx="8" fill="#D9E6FF" stroke="#3B82F6" stroke-width="1.5"/>
+                    <path d="M60 44 L72 52 L60 62" stroke="#1E2A5E" stroke-width="2"/>
+                    <path d="M200 44 L188 52 L200 62" stroke="#1E2A5E" stroke-width="2"/>
+                </svg>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" id="services">
+        <div class="container">
+            <div class="section-title animate-fade-up">что делаем</div>
+            <div class="section-sub animate-fade-up delay-1">честные цены, без переплат</div>
+            <div class="cards-grid">
+                <div class="service-card hover-lift animate-fade-up delay-2">
+                    <div class="card-icon">🤖</div>
+                    <h3>Telegram боты</h3>
+                    <p>Боты для продаж, поддержки, рассылок, опросов. Любая сложность — цена от 1000₽.</p>
+                    <div class="price-tag">от 1 000 ₽ <span class="price-small">(зависит от сложности)</span></div>
+                </div>
+                <div class="service-card hover-lift animate-fade-up delay-3">
+                    <div class="card-icon">💻</div>
+                    <h3>Сайты</h3>
+                    <p>Лендинги, визитки, корпоративные сайты. Адаптивно, красиво, быстро.</p>
+                    <div class="price-tag">до 1 500 ₽</div>
+                </div>
+                <div class="service-card hover-lift animate-fade-up delay-4">
+                    <div class="card-icon">☁️</div>
+                    <h3>Хостинг сайтов и ботов</h3>
+                    <p>Надёжный хостинг для ваших проектов.</p>
+                    <div class="soon-badge">⚡ скоро</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section" style="background: #f0f4fa;" id="process">
+        <div class="container">
+            <div class="section-title animate-fade-up">как мы работаем</div>
+            <div class="section-sub animate-fade-up delay-1">три шага — и ваш проект готов</div>
+            <div class="process-steps">
+                <div class="step animate-fade-up delay-2">
+                    <div class="step-number">1</div>
+                    <h4>получаем описание</h4>
+                    <p>Вы рассказываете, какой бот или сайт нужен, мы уточняем детали.</p>
+                </div>
+                <div class="step animate-fade-up delay-3">
+                    <div class="step-number">2</div>
+                    <h4>выполняем быстро</h4>
+                    <p>Используем ИИ для генерации кода и дизайна — сроки минимальны.</p>
+                </div>
+                <div class="step animate-fade-up delay-4">
+                    <div class="step-number">3</div>
+                    <h4>отдаём результат</h4>
+                    <p>Отправляем на почту и в любой удобный мессенджер (Telegram, WhatsApp и др.)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="projects">
+        <div class="section" style="padding-top: 0;">
+            <div class="section-title animate-fade-up">наши проекты</div>
+            <div class="section-sub animate-fade-up delay-1">скоро здесь появятся наши работы</div>
+            <div class="projects-placeholder animate-fade-up delay-2 hover-lift">
+                <div class="projects-icon">🚀</div>
+                <h3 style="margin-bottom: 12px;">Скоро</h3>
+                <p style="color: #475569;">Мы готовим портфолио наших проектов. Совсем скоро вы сможете увидеть примеры ботов и сайтов, которые мы создали.</p>
+                <div class="soon-badge" style="margin-top: 20px;">в разработке</div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<div class="dark-footer">
+    <div class="container">
+        <div class="footer-info">
+            <div class="footer-col">
+                <h4>oquori</h4>
+                <p>Telegram-боты от 1000₽<br>Сайты до 1500₽<br>С помощью нейросетей</p>
+            </div>
+            <div class="footer-col">
+                <h4>контакты</h4>
+                <p>📧 <a href="mailto:oquori@gmail.com">oquori@gmail.com</a></p>
+                <p>💬 <a href="https://t.me/oquoriBot" target="_blank">@oquoriBot</a></p>
+                <p>🛍️ <a href="https://t.me/oquorishopBot" target="_blank">@oquorishopBot</a></p>
+                <p>📞 телефон <span class="soon-light">скоро будет</span></p>
+                <p>📱 авито <span class="soon-light">скоро будет</span></p>
+            </div>
+            <div class="footer-col">
+                <h4>доставка</h4>
+                <p>на почту</p>
+                <p>в любой мессенджер</p>
+                <p>работаем с 13:00 до 23:00</p>
+            </div>
+        </div>
+        <div class="footer-bottom"></div>
+    </div>
+</div>
+
+<script>
+    function showToast(msg) {
+        const toast = document.getElementById('toastMsg');
+        toast.textContent = msg || '✨ Свяжемся с вами в удобном мессенджере';
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 2800);
+    }
+
+    const navCta = document.getElementById('navCtaBtn');
+    const heroCta = document.getElementById('heroCtaBtn');
+
+    if (navCta) navCta.addEventListener('click', () => {
+        showToast('Напишите нам: @oquoriBot или oquori@gmail.com');
+    });
+    if (heroCta) heroCta.addEventListener('click', () => {
+        window.open('https://t.me/oquoriBot', '_blank');
+        showToast('Переход в Telegram @oquoriBot');
+    });
+
+    const animatedElements = document.querySelectorAll('.animate-fade-up, .animate-fade-right, .service-card, .step, .footer-col, .projects-placeholder');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+                observer.unobserve(entry.target);
+            }
+        });
+    }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+    
+    animatedElements.forEach(el => {
+        if (el.classList.contains('animate-fade-up') || el.classList.contains('animate-fade-right')) {
+            observer.observe(el);
+        } else {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        }
+    });
+
+    setTimeout(() => {
+        document.querySelectorAll('.animate-fade-up, .animate-fade-right, .service-card, .step, .footer-col, .projects-placeholder').forEach(el => {
+            const rect = el.getBoundingClientRect();
+            if (rect.top < window.innerHeight - 100) {
+                el.style.opacity = '1';
+                el.style.transform = 'translateY(0)';
+            }
+        });
+    }, 100);
+</script>
+</body>
+</html>
